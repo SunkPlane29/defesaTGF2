@@ -430,7 +430,32 @@
 
 \section{Resultados}
 \begin{frame}{Resultados da análise Bayesiana}
+
+	\begin{itemize}
+		\item Priors uniformes: $c_{s,i}^2 \sim \mathcal{U}(0, 1)$, $\epsilon_{c,i} \sim \mathcal{U}(0, 1)$;
+	\end{itemize}
+
+	Testamos as seguintes \textit{likelihoods}:
+
+	\begin{equation}
+		\begin{aligned}
+			\mathcal{L}_\text{G}   & \propto \prod_i \exp\left( -\frac{1}{2} \left[ \frac{(M_i - \mu_{M,i})^2}{\sigma_{M,i}^2} + \frac{(R_i - \mu_{R,i})^2}{\sigma_{R,i}^2} \right] \right), \\
+			\mathcal{L}_\text{GM}  & \propto \prod_i \exp\left( -\frac{1}{2} (\mathbf{x}_i - \mathbf{\mu}_i)^\text{T} \sigma_i^{-1} (\mathbf{x}_i - \mathbf{\mu}_i) \right),                 \\
+			\mathcal{L}_\text{KDE} & \propto \sum_i K(\mathbf{x} - \mathbf{x}_i),
+		\end{aligned}
+	\end{equation}
+	onde $\mathbf{x}_i = (M_i, R_i)$ e $\mathbf{\mu}_i = (\mu_{M,i}, \mu_{R,i})$.
+
 \end{frame}
+
+\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{likelihood_choice.eps}
+	\end{figure}
+\end{frame}
+
+
 
 \section{Conclusão e perspectivas}
 \begin{frame}{Conclusão e perspectivas}
