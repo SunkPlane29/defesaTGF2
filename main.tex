@@ -455,10 +455,165 @@
 	\end{figure}
 \end{frame}
 
+\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.95\textwidth]{parameter_kdes.eps}
+	\end{figure}
+\end{frame}
 
+\begin{frame}{Resultados da rede neural}
+	\begin{itemize}
+		\item Geração dos dados de treino e validação;
+		\item Arquitetura da rede neural;
+	\end{itemize}
+
+	\begin{table}[]
+		\centering
+		\begin{tabular*}{0.9\textwidth}{@{\extracolsep{\fill}}lcc@{}}
+			\toprule
+			Camada & Número de neurônios & Função de ativação \\ \midrule
+			Input & $2 n_\text{ns}$ & --- \\
+			Camada oculta 1 & $8n_\text{ns}$ & \texttt{ReLU} \\
+			Camada oculta 2 & $8n_\text{ns}$ & \texttt{ReLU} \\
+			Camada oculta 3 & $4n_\text{ns}$ & \texttt{ReLU} \\
+			Output & 5 + $n_\text{ns}$ & \texttt{sigmoid} \\ \bottomrule \\
+		\end{tabular*}
+		\caption{Arquiterura da rede neural \footfullcite{Fujimoto_2024}, onde $n_\text{ns} = 8$.}
+	\end{table}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item Exemplo de $c_s^2(\epsilon)$ gerado para treino e validação;
+	\end{itemize}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.6\textwidth]{eos_example_cs2.eps}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	Extraindo dados de massa e raio como segue:
+	\begin{equation}
+		\begin{aligned}
+			M_i          & \sim \mathcal{U}(1,0 \; \text{M}_\odot, M_\text{max}), \quad R_i = R(M_i)                                                                          \\
+			M_i^*        & \sim \mathcal{N}(M_i, \sigma_{M,i})                                                                  ,\quad R_i^* = \mathcal{N}(R_i, \sigma_{R,i}) \\
+			\sigma_{M,i} & \sim \mathcal{U}(0, \; 0,2 \; \text{M}_\odot), \quad \sigma_{R,i} \sim \mathcal{U}(0, \; 1,2 \; \text{km})
+		\end{aligned}
+	\end{equation}
+
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.4\textwidth, height=0.65\textheight]{datagen_example.pdf}
+		\hspace{0.5cm}
+		\includegraphics[width=0.50\textwidth, height=0.65\textheight]{traningdata_example.eps}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	Minimizamos a função de erro \texttt{msle} com o otimizador \texttt{Adam} e taxa de aprendizado $\eta = 0,001$ e tamanho de \textit{minibatch} de $100.000$. Para testar a performance da rede neural, utilizamos equações de estado da literatura disponíveis no CompOSE\footnotemark.
+
+	\vspace{0.5cm}
+
+	\begin{minipage}{1.0\textwidth}
+		\begin{minipage}{0.5\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=1.0\textwidth]{eos_predictions_compose.eps}
+			\end{figure}
+		\end{minipage}
+		\begin{minipage}{0.5\textwidth}
+			\footnotetext{$^8$ \fullcite{compose}}
+			\footnotetext{\fullcite{abht}}
+			\footnotetext{\fullcite{cmf3}}
+			\footnotetext{\fullcite{apr}}
+			\footnotetext{\fullcite{bhk}}
+		\end{minipage}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{mrdiagram_predictions_compose.eps}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Comparação das abordagens}
+	Utilizando o conjunto completo de dados de massa e raio, obtemos os seguintes intervalos de credibilidade para os parâmetros inferidos:
+
+	\begin{figure}
+		\centering
+
+		\includegraphics[width=0.45\textwidth]{cs2_inferred.eps}
+		\includegraphics[width=0.45\textwidth]{epsc_inferred.eps}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item Espera-se que, ao menos nessa parametrização, a incerteza na velocidade do som aumente com a densidade, pois há menos estrelas que chegam a essas densidades centrais;
+	\end{itemize}
+
+	Gerando equações de estado com $c_{s,1}^2$ e $c_{s,5}^2$ amostrados de uma distribuição uniforme, $c_{s,i}^2 \sim \mathcal{U}(\bar{c}_{s,i}^2 - \sigma/2, \bar{c}_{s,i}^2 + \sigma/2)$, onde $\sigma = 0,5$.
+
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.5\textwidth]{mrdiagram_density_check.eps}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item A rede neural consegue quantificar incertezas aleatórias, mas falha em quantificar as incertezas epistêmicas;
+		\item Isso pode ser explicado pelo fato de que está sendo feita uma representação determinística, há apenas uma saída para cada entrada;
+	\end{itemize}
+
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.6\textwidth]{kinds_uncertanties.png}
+		\caption{\fullcite{kinds_uncertainties}}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	A função de erro utilizada na rede neural foi a \texttt{msle}, dada por
+	\begin{equation}
+		\mathcal{L}_\text{NN}(y, \hat y) = \frac{1}{M} \sum_{i=1}^M \left( \log(1 + \hat y_i) - \log(1 + y_i) \right)^2,
+	\end{equation}
+	se o output fosse uma distribuição teríamos algo da forma
+	\begin{equation}
+		\mathcal{L}_\text{BNN} = - \mathbb{E}_{q(\boldmath \theta)} \left[ \log(p(D | \boldmath \theta) \right] + \text{KL}\left( q(\boldmath \theta) \parallel p(\boldmath \theta) \right),
+	\end{equation}
+	e as incertezas epistêmicas seriam quantificadas, mesmo que apenas em parte.
+\end{frame}
+
+% \begin{frame}
+% 	Esse resultado ainda pode ser dito em outras palavras: como existem muitas escolhas de parâmetros, mas a NN pode escolher apenas um conjunto, a melhor escolha possível é a média. A abordagem Bayesiana evita esse problema pois ela pode de certa forma escolher todos os conjuntos possíveis, de acordo com suas probabilidades.
+% \end{frame}
+
+\begin{frame}
+	Por fim, conseguimos obter a equação de estado e diagrama massa-raio associado:
+
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.45\textwidth]{eos_inferred.eps}
+		\includegraphics[width=0.45\textwidth]{mrdiagram_inferred.eps}
+	\end{figure}
+\end{frame}
 
 \section{Conclusão e perspectivas}
 \begin{frame}{Conclusão e perspectivas}
+	Mostramos que:
+	\begin{itemize}
+		\item A escolha de \textit{likelihoods} Gaussianas não afeta significativamente os resultados;
+		\item A parametrização utilizada consegue representar bem equações de estado mais realísticas, apesar de satisfazer causalidade;
+		\item A NN consegue inferir as EoSs a partir de dados de massa e raio, mas falha em quantificar incertezas epistêmicas;
+		\item O custo computacional de extrair amostras da distribuição posterior via MCMC e \textit{NestedSampling} é alto comparado ao custo de inferência via NN, e aumenta com o número de dados observacionais;
+		\item Em um trabalho mais recente \footfullcite{Carvalho_2025}, foi utilizada uma abordagem de \textit{normalizing flows} com redes neurais, da qual o resultado é uma distribuição condicional dos parâmetros, e obteve resultados similares, que a incerteza em $c_s^2$ aumenta com a densidade.
+	\end{itemize}
+
 \end{frame}
 
 \begin{frame}{Agradecimentos}
