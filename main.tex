@@ -596,22 +596,6 @@
 \end{frame}
 
 \begin{frame}
-	A função de erro utilizada na rede neural foi a \texttt{msle}, dada por
-	\begin{equation}
-		\mathcal{L}_\text{NN}(y, \hat y) = \frac{1}{M} \sum_{i=1}^M \left( \log(1 + \hat y_i) - \log(1 + y_i) \right)^2,
-	\end{equation}
-	se o output fosse uma distribuição teríamos algo da forma
-	\begin{equation}
-		\mathcal{L}_\text{BNN} = - \mathbb{E}_{q_\phi(\boldmath \theta)} \left[ \log(p(D | \boldmath \theta) \right] + \text{KL}\left( q_\phi(\boldmath \theta) \parallel p(\boldmath \theta) \right),
-	\end{equation}
-	e as incertezas epistêmicas seriam quantificadas, mesmo que apenas em parte.
-\end{frame}
-
-% \begin{frame}
-% 	Esse resultado ainda pode ser dito em outras palavras: como existem muitas escolhas de parâmetros, mas a NN pode escolher apenas um conjunto, a melhor escolha possível é a média. A abordagem Bayesiana evita esse problema pois ela pode de certa forma escolher todos os conjuntos possíveis, de acordo com suas probabilidades.
-% \end{frame}
-
-\begin{frame}
 	Por fim, conseguimos obter a equação de estado e diagrama massa-raio associado:
 
 	\begin{figure}
@@ -665,6 +649,22 @@
 	\footnotesize
 	% \nocite{Raithel_2016,Fujimoto_2018}
 	\printbibliography
+\end{frame}
+
+\begin{frame}[noframenumbering]
+	A função de erro utilizada na rede neural foi a \texttt{msle}, dada por
+	\begin{equation}
+		\mathcal{L}_\text{NN}(y, \hat y) = \frac{1}{M} \sum_{i=1}^M \left( \log(1 + \hat y_i) - \log(1 + y_i) \right)^2,
+	\end{equation}
+	se o output fosse uma distribuição teríamos algo da forma
+	\begin{equation}
+		\mathcal{L}_\text{BNN} = - \mathbb{E}_{q_\phi(\boldmath \theta)} \left[ \log(p(D | \boldmath \theta) \right] + \text{KL}\left( q_\phi(\boldmath \theta) \parallel p(\boldmath \theta) \right),
+	\end{equation}
+	e as incertezas epistêmicas seriam quantificadas, mesmo que apenas em parte.
+\end{frame}
+
+\begin{frame}[noframenumbering]
+	Esse resultado ainda pode ser dito em outras palavras: como existem muitas escolhas de parâmetros, mas a NN pode escolher apenas um conjunto, a melhor escolha possível é a média. A abordagem Bayesiana evita esse problema pois ela pode de certa forma escolher todos os conjuntos possíveis, de acordo com suas probabilidades.
 \end{frame}
 
 \begin{frame}[noframenumbering]{Massa máxima de estrelas de nêutrons}
