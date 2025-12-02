@@ -222,7 +222,7 @@
 \end{frame}
 
 \begin{frame}
-	Na prática, as equações de TOV proporcionam soluções em que a pressão tende lentamente a zero. Para obter raios finitos, é necessário definir uma pressão de corte $p(r = R) \sim 1\times 10^{-8} \text{[u.p.]}$, que pode depender fortemente da EoS utilizada. As equações de TOV podem ser colocadas na forma de pseudo-entalpia,
+	Para obter raios finitos, é necessário definir uma pressão de corte $p(r = R) \sim 1\times 10^{-8} \text{[u.p.]}$, que pode depender fortemente da EoS utilizada. As equações de TOV podem ser colocadas na forma de pseudo-entalpia,
 
 	\begin{equation}
 		\begin{aligned}
@@ -293,11 +293,11 @@
 		\begin{itemize}
 			\item Podemos obter o diagrama massa-raio a partir da equação de estado utilizando as equações de TOV;
 			\item A EoS pode ser aproximada por uma forma paramétrica. Aqui utiliza-se a velocidade do som média em intervalos de densidade de energia;
-			\item Essa forma paramétrica depende de uma equação de estado inicial (crosta), aqui é utilizada a SLy4\footnotemark;
+			\item Essa forma paramétrica depende de uma equação de estado inicial (crosta), aqui é utilizada a Ska\footnotemark;
 		\end{itemize}
 	\end{block}
 
-	\footnotetext{\fullcite{Douchin_2001}.}
+	\footnotetext{\fullcite{Gulminelli_2015}.}
 \end{frame}
 
 \section{Machine learning}
@@ -321,14 +321,14 @@
 	Utilizamos o teorema de Bayes
 
 	\begin{equation}
-		P(\bm c_s^2, \bm p_c | \bm D, I) \propto P(\bm D | \bm c_s^2, \bm p_c, I) P(\bm c_s^2, \bm p_c | I),
+		P(\bm c_s^2, \bm \epsilon_c | \bm D, I) \propto P(\bm D | \bm c_s^2, \bm \epsilon_c, I) P(\bm c_s^2, \bm \epsilon_c | I),
 	\end{equation}
 	em que as pressões centrais das estrelas de cada dado observacional foram adicionadas para a definição da \textit{likelihood}. Ainda, assumimos independência dos dados e \textit{priors}
 
 	\begin{equation}
 		\begin{aligned}
-			P(\bm D | \bm c_s^2, \bm p_c, I) & = \prod_{k=1}^N P(D_k | \bm c_s^2, p_{c,k}, I),                                              \\
-			P(\bm c_s^2, \bm p_c | I)        & = \left[ \prod_{i=1}^{n} P(c_{s,i}^2 | I)\right]\left[ \prod_{k=1}^N P(p_{c,k} | I) \right].
+			P(\bm D | \bm c_s^2, \bm \epsilon_c, I) & = \prod_{k=1}^N P(D_k | \bm c_s^2, p_{c,k}, I),                                              \\
+			P(\bm c_s^2, \bm \epsilon_c | I)        & = \left[ \prod_{i=1}^{n} P(c_{s,i}^2 | I)\right]\left[ \prod_{k=1}^N P(p_{c,k} | I) \right].
 		\end{aligned}
 	\end{equation}
 \end{frame}
@@ -338,12 +338,12 @@
 
 	\begin{equation}
 		\begin{aligned}
-			P(\bm D | \bm c_s^2, \bm p_c, I) & \propto \exp\left( -\frac{\chi^2}{2} \right),                                                                                                      \\
-			\chi^2                           & = \sum_{k = 1}^{N} \frac{[M(\bm c_s^2, p_{c,k}) - M_k]^2}{\sigma_{M,k}^2} + \sum_{k = 1}^N \frac{[R(\bm c_s^2, p_{c,k}) - R_k]^2}{\sigma_{R,k}^2}.
+			P(\bm D | \bm c_s^2, \bm \epsilon_c, I) & \propto \exp\left( -\frac{\chi^2}{2} \right),                                                                                                      \\
+			\chi^2                                  & = \sum_{k = 1}^{N} \frac{[M(\bm c_s^2, p_{c,k}) - M_k]^2}{\sigma_{M,k}^2} + \sum_{k = 1}^N \frac{[R(\bm c_s^2, p_{c,k}) - R_k]^2}{\sigma_{R,k}^2}.
 		\end{aligned}
 	\end{equation}
 
-	Os dados observacionais são ajustados por distribuições gaussianas com parâmetros $\{ R_k, M_k, \sigma_{R,k}, \sigma_{M,k} \}$ e então é utilizado um \textit{sampler} que retirará amostras da distribuição posterior $P(\bm c_s^2, \bm p_c | \bm D, I)$.
+	Os dados observacionais são ajustados por distribuições gaussianas com parâmetros $\{ R_k, M_k, \sigma_{R,k}, \sigma_{M,k} \}$ e então é utilizado um \textit{sampler} que retirará amostras da distribuição posterior $P(\bm c_s^2, \bm \epsilon_c | \bm D, I)$.
 \end{frame}
 
 \begin{frame}
@@ -432,16 +432,16 @@
 \begin{frame}{Resultados da análise Bayesiana}
 
 	\begin{itemize}
-		\item Priors uniformes: $c_{s,i}^2 \sim \mathcal{U}(0, 1)$, $\epsilon_{c,i} \sim \mathcal{U}(0, 1)$;
+		\item Priors uniformes: $c_{s,i}^2 \sim \mathcal{U}(0, 1)$, $\epsilon_{c,i} \sim \mathcal{U}(3 \; \text{MeV fm}^{-3}, 1200 \; \text{MeV fm}^{-3})$;
 	\end{itemize}
 
 	Testamos as seguintes \textit{likelihoods}:
 
 	\begin{equation}
 		\begin{aligned}
-			\mathcal{L}_\text{G}   & \propto \prod_i \exp\left( -\frac{1}{2} \left[ \frac{(M_i - \mu_{M,i})^2}{\sigma_{M,i}^2} + \frac{(R_i - \mu_{R,i})^2}{\sigma_{R,i}^2} \right] \right), \\
-			\mathcal{L}_\text{GM}  & \propto \prod_i \exp\left( -\frac{1}{2} (\mathbf{x}_i - \mathbf{\mu}_i)^\text{T} \sigma_i^{-1} (\mathbf{x}_i - \mathbf{\mu}_i) \right),                 \\
-			\mathcal{L}_\text{KDE} & \propto \sum_i K(\mathbf{x} - \mathbf{x}_i),
+			\mathcal{L}_\text{G}   & \propto \prod_i \exp\left( -\frac{1}{2} \left[ \frac{(M_i - \mu_{M,i})^2}{\sigma_{M,i}^2} + \frac{(R_i - \mu_{R,i})^2}{\sigma_{R,i}^2} \right] \right),   \\
+			\mathcal{L}_\text{GM}  & \propto \prod_i \exp\left( -\frac{1}{2} (\mathbf{x}_i - \mathbf{\mu}_i)^\text{T} \Sigma_i^{-1} (\mathbf{x}_i - \mathbf{\mu}_i) \right),                   \\
+			\mathcal{L}_\text{KDE} & \propto \sum_i K(\mathbf{x} - \mathbf{x}_i), \quad K(\mathbf{x}) = \frac{1}{2\pi} \exp \left( -\frac{1}{2} \mathbf{x}^\text{T} H^{-1} \mathbf{x} \right),
 		\end{aligned}
 	\end{equation}
 	onde $\mathbf{x}_i = (M_i, R_i)$ e $\mathbf{\mu}_i = (\mu_{M,i}, \mu_{R,i})$.
@@ -494,11 +494,11 @@
 \end{frame}
 
 \begin{frame}
-	Extraindo dados de massa e raio como segue:
+	Geramos $200.000$ EoS e extraimos dados de massa e raio como segue:
 	\begin{equation}
 		\begin{aligned}
-			M_i          & \sim \mathcal{U}(1,0 \; \text{M}_\odot, M_\text{max}), \quad R_i = R(M_i)                                                                          \\
-			M_i^*        & \sim \mathcal{N}(M_i, \sigma_{M,i})                                                                  ,\quad R_i^* = \mathcal{N}(R_i, \sigma_{R,i}) \\
+			M_i          & \sim \mathcal{U}(1,0 \; \text{M}_\odot, M_\text{max}), \quad R_i = R(M_i), \quad n_\text{ns} = 0, \quad n_\text{amostras} = 20                                                      \\
+			M_i^*        & \sim \mathcal{N}(M_i, \sigma_{M,i})                                                                  ,\quad R_i^* \sim \mathcal{N}(R_i, \sigma_{R,i}), \quad n_\text{gerações} = 10 \\
 			\sigma_{M,i} & \sim \mathcal{U}(0, \; 0,2 \; \text{M}_\odot), \quad \sigma_{R,i} \sim \mathcal{U}(0, \; 1,2 \; \text{km})
 		\end{aligned}
 	\end{equation}
@@ -541,6 +541,24 @@
 \end{frame}
 
 \begin{frame}{Comparação das abordagens}
+	Dados utilizados para inferência:
+
+	\begin{equation}
+		\bm \mu_\text{obs} = \begin{bmatrix}
+			(\bm \mu_\text{PSR})_{8\times 1}  \\
+			(\bm \mu_\text{GW17})_{4\times 1} \\
+			(\bm \mu_\text{GW19})_{4\times 1}
+		\end{bmatrix},
+		\quad \Sigma_\text{obs} = \begin{bmatrix}
+			(\Sigma_\text{PSR})_{8\times8} & 0                               & 0                               \\
+			0                              & (\Sigma_\text{GW17})_{4\times4} & 0                               \\
+			0                              & 0                               & (\Sigma_\text{GW19})_{4\times4}
+		\end{bmatrix},
+	\end{equation}
+	onde $\bm \mu_\text{PSR}$ inclui os pares $(\mu_M, \mu_R)$ de PSR e $\bm \mu_\text{GW}$ inclui os pares $(\mu_{M,1}, \mu_{R,1}, \mu_{M,2}, \mu_{R,2})$ de eventos de ondas gravitacionais.
+\end{frame}
+
+\begin{frame}
 	Utilizando o conjunto completo de dados de massa e raio, obtemos os seguintes intervalos de credibilidade para os parâmetros inferidos:
 
 	\begin{figure}
@@ -584,7 +602,7 @@
 	\end{equation}
 	se o output fosse uma distribuição teríamos algo da forma
 	\begin{equation}
-		\mathcal{L}_\text{BNN} = - \mathbb{E}_{q(\boldmath \theta)} \left[ \log(p(D | \boldmath \theta) \right] + \text{KL}\left( q(\boldmath \theta) \parallel p(\boldmath \theta) \right),
+		\mathcal{L}_\text{BNN} = - \mathbb{E}_{q_\phi(\boldmath \theta)} \left[ \log(p(D | \boldmath \theta) \right] + \text{KL}\left( q_\phi(\boldmath \theta) \parallel p(\boldmath \theta) \right),
 	\end{equation}
 	e as incertezas epistêmicas seriam quantificadas, mesmo que apenas em parte.
 \end{frame}
@@ -606,13 +624,24 @@
 \section{Conclusão e perspectivas}
 \begin{frame}{Conclusão e perspectivas}
 	Mostramos que:
-	\begin{itemize}
-		\item A escolha de \textit{likelihoods} Gaussianas não afeta significativamente os resultados;
-		\item A parametrização utilizada consegue representar bem equações de estado mais realísticas, apesar de satisfazer causalidade;
-		\item A NN consegue inferir as EoSs a partir de dados de massa e raio, mas falha em quantificar incertezas epistêmicas;
-		\item O custo computacional de extrair amostras da distribuição posterior via MCMC e \textit{NestedSampling} é alto comparado ao custo de inferência via NN, e aumenta com o número de dados observacionais;
-		\item Em um trabalho mais recente \footfullcite{Carvalho_2025}, foi utilizada uma abordagem de \textit{normalizing flows} com redes neurais, da qual o resultado é uma distribuição condicional dos parâmetros, e obteve resultados similares, que a incerteza em $c_s^2$ aumenta com a densidade.
-	\end{itemize}
+	\begin{minipage}{1.0\textwidth}
+		\begin{minipage}{0.5\textwidth}
+			\begin{itemize}
+				\item \textit{Likelihoods Gaussianas};
+				\item Possibilidade de representar a EoS via $c_{s,i}^2$;
+				\item Diferenças na quantificação de incertezas;
+				\item Custo computacional de ambas as abordagens;
+				\item Resultado de um trabalho mais recente;
+			\end{itemize}
+		\end{minipage}
+		\begin{minipage}{0.5\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.95\textwidth]{carvalho2025_fig9.pdf}
+				\caption{\fullcite{Carvalho_2025}}
+			\end{figure}
+		\end{minipage}
+	\end{minipage}
 
 \end{frame}
 
